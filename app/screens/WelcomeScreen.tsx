@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Image, View } from 'react-native';
 import AppButton from '../components/Button';
+import Logo from '../components/Logo';
 
 import Screen from '../components/Screen';
 import Text from '../components/Text';
@@ -9,7 +10,7 @@ import colors from '../config/colors';
 const WelcomeScreen = () => {
   return (
     <Screen style={styles.container}>
-      <Image source={require('../assets/logo.png')} style={styles.logo} />
+      <Logo />
       <Image
         source={require('../assets/welcomeImage.png')}
         style={styles.image}
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    marginTop: 30,
+    marginTop: 50,
   },
   imageContainer: {
     flex: 1,
@@ -51,9 +52,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginBottom: 50,
     marginTop: 30,
-  },
-  textContainer: {
-    // flex: 1,
   },
 });
 
