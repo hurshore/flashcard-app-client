@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    marginTop: 50,
+    marginTop: 40,
   },
   imageContainer: {
     flex: 1,
@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   intro: {
-    justifyContent: 'flex-end',
     flex: 1,
     marginTop: 100,
   },
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 30,
     marginBottom: 50,
-    marginTop: 30,
+    marginTop: 10,
   },
 });
 
