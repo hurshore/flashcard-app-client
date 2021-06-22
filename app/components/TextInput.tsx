@@ -3,11 +3,24 @@ import { StyleSheet, TextInput } from 'react-native';
 import colors from '../config/colors';
 
 interface TextInputProps {
+  numberOfLines?: number;
   placeholder: string;
+  textAlignVertical?: 'center' | 'auto' | 'top' | 'bottom';
 }
 
-const AppTextInput = ({ placeholder }: TextInputProps) => {
-  return <TextInput placeholder={placeholder} style={styles.input} />;
+const AppTextInput = ({
+  numberOfLines = 1,
+  placeholder,
+  textAlignVertical = 'center',
+}: TextInputProps) => {
+  return (
+    <TextInput
+      numberOfLines={numberOfLines}
+      placeholder={placeholder}
+      style={styles.input}
+      textAlignVertical={textAlignVertical}
+    />
+  );
 };
 
 const styles = StyleSheet.create({

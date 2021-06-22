@@ -2,7 +2,6 @@ import React from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 
 import Screen from '../components/Screen';
-import Card from '../components/Card';
 import FlashcardSet from '../components/FlashcardSet';
 import Text from '../components/Text';
 import colors from '../config/colors';
