@@ -26,7 +26,7 @@ const WelcomeScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    padding: 10,
   },
   image: {
     width: '100%',

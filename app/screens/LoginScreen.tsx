@@ -35,7 +35,7 @@ const LoginScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    padding: 10,
   },
   form: {
     marginVertical: 40,

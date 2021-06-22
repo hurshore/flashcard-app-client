@@ -29,10 +29,10 @@ const FLASHCARDS = [
   },
 ];
 
-const HomeScreen = ({}) => {
+const UserFlashcardsScreen = ({}) => {
   return (
     <Screen style={styles.container}>
-      <Text style={styles.header}>Explore</Text>
+      <Text style={styles.header}>My Flashcards</Text>
       <FlatList
         data={FLASHCARDS}
         keyExtractor={(item) => item.id.toString()}
@@ -60,4 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default UserFlashcardsScreen;
