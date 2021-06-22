@@ -8,25 +8,23 @@ import Text from '../components/Text';
 import TextInput from '../components/TextInput';
 import colors from '../config/colors';
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
   return (
     <Screen style={styles.container}>
       <Logo />
       <View style={styles.mainContent}>
-        <Text style={styles.welcomeText}>Hey,{'\n'}Log in Now</Text>
+        <Text style={styles.welcomeText}>Hey,{'\n'}Register Now</Text>
         <Text style={styles.infoText}>
-          If you are new / <Text style={styles.link}>Register</Text>
+          Have an account? / <Text style={styles.link}>Log in</Text>
         </Text>
         <View style={styles.form}>
+          <TextInput placeholder="Name" />
           <TextInput placeholder="Email" />
           <TextInput placeholder="Password" />
-          <Text style={styles.infoText}>
-            Forgot password? / <Text style={styles.link}>Reset</Text>
-          </Text>
         </View>
         <Button
-          onPress={() => console.log('Log in button clicked')}
-          title="Log in"
+          onPress={() => console.log('Register button clicked')}
+          title="Register"
         />
       </View>
     </Screen>
@@ -58,4 +56,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default RegisterScreen;
