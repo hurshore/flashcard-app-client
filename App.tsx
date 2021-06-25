@@ -8,6 +8,7 @@ import HomeScreen from './app/screens/HomeScreen';
 import CreateFlashcardScreen from './app/screens/CreateFlashcardScreen';
 import UserFlashcardsScreen from './app/screens/UserFlashcardsScreen';
 import ViewFlashcardScreen from './app/screens/ViewFlashcardScreen';
+import AccountScreen from './app/screens/AccountScreen';
 
 const FLASHCARDS = [
   {
@@ -33,9 +34,5 @@ const FLASHCARDS = [
 ];
 
 export default function App() {
-  return (
-    <>
-      <ViewFlashcardScreen subject="Science" flashcards={FLASHCARDS} />
-    </>
-  );
+  return <AccountScreen />;
 }

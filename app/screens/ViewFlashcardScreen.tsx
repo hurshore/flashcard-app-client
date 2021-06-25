@@ -58,10 +58,26 @@ const ViewFlashcardScreen = ({ flashcards, subject }: ViewFlashcardsProps) => {
 
   const goToNextCard = (): void => {
     if (currentNumber < flashcards.length) setCurrentNumber(currentNumber + 1);
+    if (flipped) {
+      Animated.timing(flipAnim, {
+        toValue: 0,
+        duration: 0,
+        useNativeDriver: true,
+      }).start();
+      setFlipped(false);
+    }
   };
 
   const goToPreviousCard = (): void => {
     if (currentNumber > 1) setCurrentNumber(currentNumber - 1);
+    if (flipped) {
+      Animated.timing(flipAnim, {
+        toValue: 0,
+        duration: 0,
+        useNativeDriver: true,
+      }).start();
+      setFlipped(false);
+    }
   };
 
   return (

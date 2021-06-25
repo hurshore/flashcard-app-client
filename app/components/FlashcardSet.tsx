@@ -27,7 +27,7 @@ const FlashcardSet = ({
         </View>
         <MaterialCommunityIcons
           name="chevron-right"
-          color={colors.primary}
+          color={colors.medium}
           size={35}
         />
       </View>
