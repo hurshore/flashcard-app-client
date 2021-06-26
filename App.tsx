@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react';
 
+import FlipCardContext from './app/context/flipcard';
 import WelcomeScreen from './app/screens/WelcomeScreen';
 import LoginScreen from './app/screens/LoginScreen';
 import RegisterScreen from './app/screens/RegisterScreen';
@@ -34,5 +35,15 @@ const FLASHCARDS = [
 ];
 
 export default function App() {
-  return <AccountScreen />;
+  const [flipped, setFlipped] = useState(false);
+
+  const flipCard = () => {
+    setFlipped(!flipped);
+  };
+
+  return (
+    <FlipCardContext.Provider value={{ flipped, flipCard }}>
+      <ViewFlashcardScreen subject="Science" flashcards={FLASHCARDS} />
+    </FlipCardContext.Provider>
+  );
 }

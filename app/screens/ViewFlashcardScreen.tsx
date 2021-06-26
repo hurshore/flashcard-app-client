@@ -1,11 +1,5 @@
-import React, { useState, useRef } from 'react';
-import {
-  Animated,
-  View,
-  StyleSheet,
-  ScrollView,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import React, { useState, useRef, useContext, useEffect } from 'react';
+import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import * as Progress from 'react-native-progress';
@@ -14,6 +8,8 @@ import Screen from '../components/Screen';
 import colors from '../config/colors';
 import Text from '../components/Text';
 import Button from '../components/Button';
+import CardFlip from '../components/CardFlip';
+import FlipCardContext from '../context/flipcard';
 
 interface ViewFlashcardsProps {
   flashcards: {
@@ -25,59 +21,28 @@ interface ViewFlashcardsProps {
 
 const ViewFlashcardScreen = ({ flashcards, subject }: ViewFlashcardsProps) => {
   const [currentNumber, setCurrentNumber] = useState<number>(1);
-  const [flipped, setFlipped] = useState(false);
-  const flipAnim = useRef(new Animated.Value(0)).current;
-  const frontInterpolate = flipAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '180deg'],
-  });
-  const backInterpolate = flipAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['180deg', '360deg'],
-  });
+  const [delayAnimation, setDelayAnimation] = useState(true);
+  const { flipped, flipCard } = useContext(FlipCardContext);
+  const isInitialMount = useRef(true);
 
-  const flipCard = (): void => {
-    if (!flipped) {
-      Animated.spring(flipAnim, {
-        toValue: 1,
-        friction: 8,
-        tension: 10,
-        useNativeDriver: true,
-      }).start();
-      setFlipped(true);
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
     } else {
-      Animated.spring(flipAnim, {
-        toValue: 0,
-        friction: 8,
-        tension: 10,
-        useNativeDriver: true,
-      }).start();
-      setFlipped(false);
+      setDelayAnimation(true);
     }
-  };
+  }, [currentNumber]);
 
   const goToNextCard = (): void => {
     if (currentNumber < flashcards.length) setCurrentNumber(currentNumber + 1);
-    if (flipped) {
-      Animated.timing(flipAnim, {
-        toValue: 0,
-        duration: 0,
-        useNativeDriver: true,
-      }).start();
-      setFlipped(false);
-    }
+    if (flipped) flipCard();
+    setDelayAnimation(false);
   };
 
   const goToPreviousCard = (): void => {
     if (currentNumber > 1) setCurrentNumber(currentNumber - 1);
-    if (flipped) {
-      Animated.timing(flipAnim, {
-        toValue: 0,
-        duration: 0,
-        useNativeDriver: true,
-      }).start();
-      setFlipped(false);
-    }
+    if (flipped) flipCard();
+    setDelayAnimation(false);
   };
 
   return (
@@ -103,48 +68,11 @@ const ViewFlashcardScreen = ({ flashcards, subject }: ViewFlashcardsProps) => {
       </View>
       <View style={styles.mainContent}>
         <View style={styles.flashcardContainer}>
-          <Animated.View
-            style={[
-              styles.flipcard,
-              {
-                transform: [{ rotateY: frontInterpolate }],
-                zIndex: !flipped ? 1 : 0,
-              },
-            ]}
-          >
-            <ScrollView
-              contentContainerStyle={styles.cardContainerStyle}
-              style={styles.card}
-            >
-              <View style={styles.flashcard}>
-                <Text style={styles.cardText}>
-                  {flashcards[currentNumber - 1].question}
-                </Text>
-              </View>
-            </ScrollView>
-          </Animated.View>
-
-          <Animated.View
-            style={[
-              styles.flipcard,
-              styles.flipcardBack,
-              {
-                transform: [{ rotateY: backInterpolate }],
-                zIndex: flipped ? 1 : 0,
-              },
-            ]}
-          >
-            <ScrollView
-              contentContainerStyle={styles.cardContainerStyle}
-              style={styles.card}
-            >
-              <View style={styles.flashcard}>
-                <Text style={styles.cardText}>
-                  {flashcards[currentNumber - 1].answer}
-                </Text>
-              </View>
-            </ScrollView>
-          </Animated.View>
+          <CardFlip
+            frontText={flashcards[currentNumber - 1].question}
+            backText={flashcards[currentNumber - 1].answer}
+            delay={delayAnimation}
+          />
         </View>
         <View style={styles.progress}>
           <Progress.Bar
@@ -170,34 +98,8 @@ const ViewFlashcardScreen = ({ flashcards, subject }: ViewFlashcardsProps) => {
 };
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.white,
-  },
-  cardContainerStyle: {
-    alignContent: 'center',
-    justifyContent: 'center',
-    flexGrow: 1,
-    width: '100%',
-  },
-  cardText: {
-    textAlign: 'center',
-  },
   container: {
     backgroundColor: colors.light,
-  },
-  flashcard: {
-    padding: 15,
-  },
-  flipcard: {
-    backgroundColor: 'red',
-    backfaceVisibility: 'hidden',
-    borderRadius: 30,
-    height: '100%',
-    overflow: 'hidden',
-    width: '100%',
-  },
-  flipcardBack: {
-    bottom: '100%',
   },
   flashcardContainer: {
     alignItems: 'center',
@@ -220,11 +122,6 @@ const styles = StyleSheet.create({
   },
   progressCount: {
     color: colors.medium,
-  },
-  question: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
   subject: {
     color: colors.white,
