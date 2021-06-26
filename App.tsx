@@ -43,7 +43,7 @@ export default function App() {
 
   return (
     <FlipCardContext.Provider value={{ flipped, flipCard }}>
-      <ViewFlashcardScreen subject="Science" flashcards={FLASHCARDS} />
+      <ViewFlashcardScreen subject="Technology" flashcards={FLASHCARDS} />
     </FlipCardContext.Provider>
   );
 }

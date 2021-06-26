@@ -1,5 +1,12 @@
 import React, { useRef, useContext, useEffect } from 'react';
-import { Animated, View, StyleSheet, ScrollView } from 'react-native';
+import {
+  Animated,
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import colors from '../config/colors';
 import FlipCardContext from '../context/flipcard';
@@ -9,9 +16,15 @@ interface CardFlipProps {
   frontText: string;
   backText: string;
   delay: boolean;
+  setModalOpen: () => void;
 }
 
-const CardFlip = ({ frontText, backText, delay }: CardFlipProps) => {
+const CardFlip = ({
+  frontText,
+  backText,
+  delay,
+  setModalOpen,
+}: CardFlipProps) => {
   const { flipped } = useContext(FlipCardContext);
   const isInitialMount = useRef(true);
 
@@ -45,24 +58,6 @@ const CardFlip = ({ frontText, backText, delay }: CardFlipProps) => {
     }
   }, [flipped]);
 
-  const flipCard = (): void => {
-    if (!flipped) {
-      Animated.spring(flipAnim, {
-        toValue: 1,
-        friction: 8,
-        tension: 10,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      Animated.spring(flipAnim, {
-        toValue: 0,
-        friction: 8,
-        tension: 10,
-        useNativeDriver: true,
-      }).start();
-    }
-  };
-
   return (
     <>
       <Animated.View
@@ -74,6 +69,15 @@ const CardFlip = ({ frontText, backText, delay }: CardFlipProps) => {
           },
         ]}
       >
+        <TouchableWithoutFeedback onPress={setModalOpen}>
+          <View style={styles.moreOptions}>
+            <MaterialCommunityIcons
+              name="dots-vertical"
+              size={25}
+              color={colors.medium}
+            />
+          </View>
+        </TouchableWithoutFeedback>
         <ScrollView
           contentContainerStyle={styles.cardContainerStyle}
           style={styles.card}
@@ -132,6 +136,12 @@ const styles = StyleSheet.create({
   },
   flipcardBack: {
     bottom: '100%',
+  },
+  moreOptions: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    zIndex: 2,
   },
 });
 
