@@ -1,22 +1,38 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
 import Button from '../components/Button';
 import Logo from '../components/Logo';
-
 import Screen from '../components/Screen';
 import Text from '../components/Text';
 import TextInput from '../components/TextInput';
 import colors from '../config/colors';
+import { AuthStackParamList } from '../navigation/types';
 
-const RegisterScreen = () => {
+type RegisterScreenNavigationProp = StackNavigationProp<
+  AuthStackParamList,
+  'Register'
+>;
+
+interface RegisterScreenProps {
+  navigation: RegisterScreenNavigationProp;
+}
+
+const RegisterScreen = ({ navigation }: RegisterScreenProps) => {
   return (
     <Screen style={styles.container}>
       <Logo />
       <View style={styles.mainContent}>
         <Text style={styles.welcomeText}>Hey,{'\n'}Register Now</Text>
-        <Text style={styles.infoText}>
-          Have an account? / <Text style={styles.link}>Log in</Text>
-        </Text>
+        <View style={styles.login}>
+          <Text style={styles.infoText}>Have an account? / </Text>
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate('Login')}
+          >
+            <Text style={styles.link}>Log in</Text>
+          </TouchableWithoutFeedback>
+        </View>
         <View style={styles.form}>
           <TextInput placeholder="Name" />
           <TextInput placeholder="Email" />
@@ -43,8 +59,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   link: {
-    fontWeight: '700',
+    bottom: 2,
     color: colors.primary,
+    fontWeight: '700',
+  },
+  login: {
+    flexDirection: 'row',
   },
   mainContent: {
     marginTop: 50,

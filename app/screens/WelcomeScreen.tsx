@@ -2,23 +2,39 @@ import React from 'react';
 import { StyleSheet, Image, View } from 'react-native';
 import AppButton from '../components/Button';
 import Logo from '../components/Logo';
+import { StackNavigationProp } from '@react-navigation/stack';
 
+import { AuthStackParamList } from '../navigation/types';
 import Screen from '../components/Screen';
 import Text from '../components/Text';
 import colors from '../config/colors';
 
-const WelcomeScreen = () => {
+type WelcomeScreenNavigationProp = StackNavigationProp<
+  AuthStackParamList,
+  'Welcome'
+>;
+
+interface WelcomeScreenProps {
+  navigation: WelcomeScreenNavigationProp;
+}
+
+const WelcomeScreen = ({ navigation }: WelcomeScreenProps) => {
   return (
     <Screen style={styles.container}>
       <Logo />
-      <Image
-        source={require('../assets/welcomeImage.png')}
-        style={styles.image}
-      />
+      <View style={styles.imageContainer}>
+        <Image
+          source={require('../assets/welcomeImage.png')}
+          style={styles.image}
+        />
+      </View>
       <View style={styles.intro}>
         <Text style={styles.infoText}>Get started</Text>
         <Text style={styles.mainText}>Learn in a fun way with flashcards</Text>
-        <AppButton onPress={() => console.log('Button clicked')} title="Next" />
+        <AppButton
+          onPress={() => navigation.navigate('Register')}
+          title="Next"
+        />
       </View>
     </Screen>
   );
@@ -29,12 +45,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   image: {
-    width: '100%',
     marginTop: 40,
   },
   imageContainer: {
-    flex: 1,
-    margin: 'auto',
+    alignItems: 'center',
   },
   infoText: {
     color: colors.medium,

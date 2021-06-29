@@ -5,6 +5,7 @@ import Button from '../components/Button';
 import Screen from '../components/Screen';
 import Text from '../components/Text';
 import TextInput from '../components/TextInput';
+import colors from '../config/colors';
 
 const CreateFlashcardScreen = ({}) => {
   return (
@@ -18,7 +19,7 @@ const CreateFlashcardScreen = ({}) => {
       />
       <TextInput
         placeholder="Answer"
-        numberOfLines={3}
+        numberOfLines={5}
         textAlignVertical="top"
       />
       <Button
@@ -36,6 +37,7 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 10,
+    backgroundColor: colors.white,
   },
   header: {
     fontSize: 20,

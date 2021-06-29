@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 
 import FlipCardContext from './app/context/flipcard';
 import WelcomeScreen from './app/screens/WelcomeScreen';
@@ -10,6 +11,8 @@ import CreateFlashcardScreen from './app/screens/CreateFlashcardScreen';
 import UserFlashcardsScreen from './app/screens/UserFlashcardsScreen';
 import ViewFlashcardScreen from './app/screens/ViewFlashcardScreen';
 import AccountScreen from './app/screens/AccountScreen';
+import AuthNavigator from './app/navigation/AuthNavigator';
+import AppNavigator from './app/navigation/AppNavigator';
 
 const FLASHCARDS = [
   {
@@ -42,8 +45,12 @@ export default function App() {
   };
 
   return (
-    <FlipCardContext.Provider value={{ flipped, flipCard }}>
-      <ViewFlashcardScreen subject="Technology" flashcards={FLASHCARDS} />
-    </FlipCardContext.Provider>
+    <NavigationContainer>
+      <FlipCardContext.Provider value={{ flipped, flipCard }}>
+        <AppNavigator />
+        {/* <AuthNavigator /> */}
+        {/* <ViewFlashcardScreen subject="Technology" flashcards={FLASHCARDS} /> */}
+      </FlipCardContext.Provider>
+    </NavigationContainer>
   );
 }

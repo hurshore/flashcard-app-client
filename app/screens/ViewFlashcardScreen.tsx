@@ -57,8 +57,6 @@ const ViewFlashcardScreen = ({ flashcards, subject }: ViewFlashcardsProps) => {
     }
   };
 
-  const showMoreOptions = () => {};
-
   return (
     <Screen style={styles.container}>
       <View style={styles.subjectContainer}>

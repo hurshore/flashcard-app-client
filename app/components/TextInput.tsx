@@ -17,6 +17,7 @@ const AppTextInput = ({
     <TextInput
       numberOfLines={numberOfLines}
       placeholder={placeholder}
+      placeholderTextColor={colors.medium}
       style={styles.input}
       textAlignVertical={textAlignVertical}
     />
