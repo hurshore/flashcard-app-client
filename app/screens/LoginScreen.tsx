@@ -17,6 +17,7 @@ import {
 import authApi from '../api/auth';
 import useApi from '../hooks/useApi';
 import useAuth from '../auth/useAuth';
+import ActivityIndicator from '../components/ActivityIndicator';
 
 type LoginScreenNavigationProp = StackNavigationProp<
   AuthStackParamList,
@@ -50,42 +51,43 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
   };
 
   return (
-    <Screen style={styles.container}>
-      <Logo />
-      <View style={styles.mainContent}>
-        <Text style={styles.welcomeText}>Hey,{'\n'}Log in Now</Text>
-        <View style={styles.register}>
-          <Text style={styles.infoText}>If you are new / </Text>
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate('Register')}
-          >
-            <Text style={styles.link}>Register</Text>
-          </TouchableWithoutFeedback>
+    <>
+      <ActivityIndicator visible={loginApi.loading} />
+      <Screen style={styles.container}>
+        <Logo />
+        <View style={styles.mainContent}>
+          <Text style={styles.welcomeText}>Hey,{'\n'}Log in Now</Text>
+          <View style={styles.register}>
+            <Text style={styles.infoText}>If you are new / </Text>
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate('Register')}
+            >
+              <Text style={styles.link}>Register</Text>
+            </TouchableWithoutFeedback>
+          </View>
+          <View style={styles.form}>
+            <Form
+              initialValues={{ email: '', password: '' }}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              <ErrorMessage
+                error="Email or password is incorrect"
+                visible={loginFailed}
+              />
+              <View style={styles.fields}>
+                <FormField name="email" placeholder="Email" />
+                <FormField name="password" placeholder="Password" />
+                <Text style={styles.infoText}>
+                  Forgot password? / <Text style={styles.link}>Reset</Text>
+                </Text>
+              </View>
+              <SubmitButton title="Log in" />
+            </Form>
+          </View>
         </View>
-        <View style={styles.form}>
-          {loginApi.loading && <Text>Loading...</Text>}
-          {loginApi.error && <Text>{loginApi.error}</Text>}
-          <Form
-            initialValues={{ email: '', password: '' }}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            <ErrorMessage
-              error="Email or password is incorrect"
-              visible={loginFailed}
-            />
-            <View style={styles.fields}>
-              <FormField name="email" placeholder="Email" />
-              <FormField name="password" placeholder="Password" />
-              <Text style={styles.infoText}>
-                Forgot password? / <Text style={styles.link}>Reset</Text>
-              </Text>
-            </View>
-            <SubmitButton title="Log in" />
-          </Form>
-        </View>
-      </View>
-    </Screen>
+      </Screen>
+    </>
   );
 };
 
