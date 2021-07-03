@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 
+import AuthContext from './app/auth/context';
 import FlipCardContext from './app/context/flipcard';
 import WelcomeScreen from './app/screens/WelcomeScreen';
 import LoginScreen from './app/screens/LoginScreen';
@@ -37,7 +38,14 @@ const FLASHCARDS = [
   },
 ];
 
+type IUSer = {
+  name: string;
+  email: string;
+  flashcardSets: [];
+};
+
 export default function App() {
+  const [user, setUser] = useState<IUSer | null>(null);
   const [flipped, setFlipped] = useState(false);
 
   const flipCard = () => {
@@ -46,11 +54,12 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <FlipCardContext.Provider value={{ flipped, flipCard }}>
-        <AppNavigator />
-        {/* <AuthNavigator /> */}
-        {/* <ViewFlashcardScreen subject="Technology" flashcards={FLASHCARDS} /> */}
-      </FlipCardContext.Provider>
+      <AuthContext.Provider value={{ user, setUser }}>
+        <FlipCardContext.Provider value={{ flipped, flipCard }}>
+          {user ? <AppNavigator /> : <AuthNavigator />}
+          {/* <ViewFlashcardScreen subject="Technology" flashcards={FLASHCARDS} /> */}
+        </FlipCardContext.Provider>
+      </AuthContext.Provider>
     </NavigationContainer>
   );
 }

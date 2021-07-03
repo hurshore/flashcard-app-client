@@ -1,6 +1,11 @@
 import React from 'react';
 
-const FlipCardContext = React.createContext({
+interface ContextType {
+  flipped: boolean;
+  flipCard: () => void;
+}
+
+const FlipCardContext = React.createContext<ContextType>({
   flipped: false,
   flipCard: () => {},
 });
