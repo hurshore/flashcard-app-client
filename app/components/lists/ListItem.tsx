@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableHighlight } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Text from '../Text';
@@ -9,22 +9,30 @@ interface ListItemProps {
   title: string;
   subtitle?: string;
   IconComponent: JSX.Element;
+  onPress?: () => void;
 }
 
-const ListItem = ({ title, subtitle, IconComponent }: ListItemProps) => {
+const ListItem = ({
+  title,
+  subtitle,
+  IconComponent,
+  onPress,
+}: ListItemProps) => {
   return (
-    <View style={styles.container}>
-      {IconComponent}
-      <View style={styles.body}>
-        <Text style={styles.title}>{title}</Text>
-        {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+    <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
+      <View style={styles.container}>
+        {IconComponent}
+        <View style={styles.body}>
+          <Text style={styles.title}>{title}</Text>
+          {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+        </View>
+        <MaterialCommunityIcons
+          name="chevron-right"
+          color={colors.medium}
+          size={25}
+        />
       </View>
-      <MaterialCommunityIcons
-        name="chevron-right"
-        color={colors.medium}
-        size={25}
-      />
-    </View>
+    </TouchableHighlight>
   );
 };
 
