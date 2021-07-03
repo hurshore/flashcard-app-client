@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 const useApi = (apiFunc: (...rest: any[]) => any) => {
   const [data, setData] = useState([]);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const request = async (...args: any[]) => {
@@ -10,7 +10,7 @@ const useApi = (apiFunc: (...rest: any[]) => any) => {
     const response = await apiFunc(...args);
     setLoading(false);
 
-    setError(!response.ok);
+    setError(!response.ok && response.data.error);
     setData(response.data);
     return response;
   };

@@ -4,7 +4,7 @@ import colors from '../../config/colors';
 import Text from '../Text';
 
 interface ErrorProps {
-  error: string | undefined;
+  error: string | undefined | null;
   visible: boolean | undefined;
 }
 
