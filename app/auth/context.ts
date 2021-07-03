@@ -3,7 +3,6 @@ import React from 'react';
 type User = {
   name: string;
   email: string;
-  flashcardSets: [];
 };
 
 interface ContextType {

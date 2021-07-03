@@ -5,6 +5,7 @@ import Screen from '../components/Screen';
 import Icon from '../components/Icon';
 import colors from '../config/colors';
 import { ListItem, ListItemSeparator } from '../components/lists';
+import useAuth from '../auth/useAuth';
 
 const menuItems = [
   {
@@ -25,13 +26,15 @@ const menuItems = [
 ];
 
 const AccountScreen = ({}) => {
+  const { user } = useAuth();
+
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <View style={styles.container}>
           <ListItem
-            title="Tofunmi Osho"
-            subtitle="osho@domain.com"
+            title={user ? user.name : 'user@domain.com'}
+            subtitle={user?.email}
             IconComponent={
               <Icon name="account" backgroundColor={colors.primary} size={50} />
             }

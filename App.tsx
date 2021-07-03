@@ -38,14 +38,13 @@ const FLASHCARDS = [
   },
 ];
 
-type IUSer = {
+type USer = {
   name: string;
   email: string;
-  flashcardSets: [];
 };
 
 export default function App() {
-  const [user, setUser] = useState<IUSer | null>(null);
+  const [user, setUser] = useState<USer | null>(null);
   const [flipped, setFlipped] = useState(false);
 
   const flipCard = () => {

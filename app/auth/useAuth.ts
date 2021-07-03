@@ -4,9 +4,10 @@ import AuthContext from './context';
 import authStorage from './storage';
 
 type User = {
+  _id: string;
   name: string;
   email: string;
-  flashcardSets: [];
+  iat: string;
 };
 
 const useAuth = () => {
@@ -14,7 +15,7 @@ const useAuth = () => {
 
   const logIn = async (token: string) => {
     const user: User = jwtDecode(token);
-    setUser(user);
+    setUser({ name: user.name, email: user.email });
     await authStorage.storeToken(token);
   };
 
