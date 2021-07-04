@@ -20,7 +20,9 @@ const FlashcardSet = ({
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
         <View style={styles.details}>
-          <Text style={styles.subject}>{subject}</Text>
+          <Text style={styles.subject} numberOfLines={1}>
+            {subject}
+          </Text>
           <Text style={styles.flashcardCount}>
             {flashcardCount} {flashcardCount > 1 ? 'flashcards' : 'flashcard'}
           </Text>
