@@ -1,19 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import AppLoading from 'expo-app-loading';
 
 import AuthContext from './app/auth/context';
 import FlipCardContext from './app/context/flipcard';
-import WelcomeScreen from './app/screens/WelcomeScreen';
-import LoginScreen from './app/screens/LoginScreen';
-import RegisterScreen from './app/screens/RegisterScreen';
-import HomeScreen from './app/screens/HomeScreen';
-import CreateFlashcardScreen from './app/screens/CreateFlashcardScreen';
-import UserFlashcardsScreen from './app/screens/UserFlashcardsScreen';
-import ViewFlashcardScreen from './app/screens/ViewFlashcardScreen';
-import AccountScreen from './app/screens/AccountScreen';
 import AuthNavigator from './app/navigation/AuthNavigator';
 import AppNavigator from './app/navigation/AppNavigator';
+import authStorage from './app/auth/storage';
 
 const FLASHCARDS = [
   {
@@ -46,10 +40,26 @@ type USer = {
 export default function App() {
   const [user, setUser] = useState<USer | null>(null);
   const [flipped, setFlipped] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   const flipCard = () => {
     setFlipped(!flipped);
   };
+
+  const restoreUser = async () => {
+    const user = await authStorage.getUser();
+    if (user) setUser(user);
+  };
+
+  if (!isReady) {
+    return (
+      <AppLoading
+        startAsync={restoreUser}
+        onFinish={() => setIsReady(true)}
+        onError={console.warn}
+      />
+    );
+  }
 
   return (
     <NavigationContainer>
