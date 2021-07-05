@@ -6,7 +6,7 @@ import colors from '../config/colors';
 import Text from './Text';
 
 interface FlashcardSetProps {
-  onPress: () => void;
+  onPress: (amount: number) => void;
   flashcardCount: number;
   subject: string;
 }
@@ -17,7 +17,7 @@ const FlashcardSet = ({
   subject,
 }: FlashcardSetProps) => {
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
+    <TouchableWithoutFeedback onPress={() => onPress(flashcardCount)}>
       <View style={styles.container}>
         <View style={styles.details}>
           <Text style={styles.subject} numberOfLines={1}>

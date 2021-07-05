@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { decode } from 'html-entities';
 
 import colors from '../config/colors';
 import FlipCardContext from '../context/flipcard';
@@ -83,7 +84,7 @@ const CardFlip = ({
           style={styles.card}
         >
           <View style={styles.flashcard}>
-            <Text style={styles.cardText}>{frontText}</Text>
+            <Text style={styles.cardText}>{decode(frontText)}</Text>
           </View>
         </ScrollView>
       </Animated.View>
@@ -103,7 +104,7 @@ const CardFlip = ({
           style={styles.card}
         >
           <View style={styles.flashcard}>
-            <Text style={styles.cardText}>{backText}</Text>
+            <Text style={styles.cardText}>{decode(backText)}</Text>
           </View>
         </ScrollView>
       </Animated.View>

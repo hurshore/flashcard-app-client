@@ -13,5 +13,10 @@ export type AppStackParamList = {
 
 export type HomeScreenParamList = {
   Home: undefined;
-  ViewFlashcard: { id: string; subject: string; random: boolean };
+  ViewFlashcard: {
+    id: string;
+    subject: string;
+    random: boolean;
+    flashcardCount: number;
+  };
 };

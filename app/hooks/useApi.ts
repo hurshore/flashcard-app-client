@@ -10,7 +10,7 @@ const useApi = (apiFunc: (...rest: any[]) => any) => {
     const response = await apiFunc(...args);
     setLoading(false);
 
-    setError(!response.ok && (response.data.error || 'Something went wrong'));
+    setError(!response.ok && response.data.error);
     setData(response.data);
     return response;
   };

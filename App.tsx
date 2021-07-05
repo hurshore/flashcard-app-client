@@ -9,29 +9,6 @@ import AuthNavigator from './app/navigation/AuthNavigator';
 import AppNavigator from './app/navigation/AppNavigator';
 import authStorage from './app/auth/storage';
 
-const FLASHCARDS = [
-  {
-    answer: 'World Wide Web',
-    question: 'What is the full meaning of WWW?',
-    flashcardSetId: '60d0475a988042139a947815',
-  },
-  {
-    answer: 'HyperText Markup Language',
-    question: 'What is the full meaning of HTML?',
-    flashcardSetId: '60d0475a988042139a947815',
-  },
-  {
-    answer: 'Cascading Style Sheet',
-    question: 'What is the full meaning of CSS?',
-    flashcardSetId: '60d0475a988042139a947815',
-  },
-  {
-    answer: 'JavaScript',
-    question: 'What is the full meaning of JS?',
-    flashcardSetId: '60d0475a988042139a947815',
-  },
-];
-
 type USer = {
   name: string;
   email: string;
@@ -66,7 +43,7 @@ export default function App() {
       <AuthContext.Provider value={{ user, setUser }}>
         <FlipCardContext.Provider value={{ flipped, flipCard }}>
           {user ? <AppNavigator /> : <AuthNavigator />}
-          {/* <ViewFlashcardScreen subject="Technology" flashcards={FLASHCARDS} /> */}
+          <StatusBar style="auto" />
         </FlipCardContext.Provider>
       </AuthContext.Provider>
     </NavigationContainer>

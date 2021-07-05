@@ -32,6 +32,12 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     exploreApi.request();
   }, []);
 
+  function getRandomInt(min: number, max: number) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
   return (
     <Screen style={styles.container}>
       <Text style={styles.header}>Explore</Text>
@@ -42,15 +48,16 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <FlashcardSet
-              onPress={() =>
+              onPress={(count: number) =>
                 navigation.navigate('ViewFlashcard', {
                   id: item.id,
                   random: true,
                   subject: item.name,
+                  flashcardCount: count,
                 })
               }
               subject={item.name}
-              flashcardCount={20}
+              flashcardCount={getRandomInt(10, 20)}
             />
           )}
         />
