@@ -4,13 +4,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import LoginScreen from '../screens/LoginScreen';
+import { AuthStackParamList } from './types';
 
-type RootStackParamList = {
-  Welcome: undefined;
-  Register: undefined;
-  Login: undefined;
-};
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator<AuthStackParamList>();
 
 const AuthNavigator = () => {
   return (

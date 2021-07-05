@@ -2,20 +2,21 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import HomeScreen from '../screens/HomeScreen';
 import CreateFlashcardScreen from '../screens/CreateFlashcardScreen';
 import UserFlashcardsScreen from '../screens/UserFlashcardsScreen';
 import AccountScreen from '../screens/AccountScreen';
 import colors from '../config/colors';
+import HomeNavigator from './HomeNavigator';
+import { AppStackParamList } from './types';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<AppStackParamList>();
 
 const AppNavigator = () => {
   return (
     <Tab.Navigator tabBarOptions={{ activeTintColor: colors.primary }}>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
@@ -23,7 +24,7 @@ const AppNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Add Flashcard"
+        name="AddFlashcard"
         component={CreateFlashcardScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -32,7 +33,7 @@ const AppNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="My Flashcards"
+        name="MyFlashcards"
         component={UserFlashcardsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
