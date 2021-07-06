@@ -13,6 +13,7 @@ import {
 } from '../components/forms';
 import useApi from '../hooks/useApi';
 import flashcardApi from '../api/flashcard';
+import UploadScreen from './UploadScreen';
 
 const validationSchema = Yup.object().shape({
   subject: Yup.string().required().label('Subject'),
@@ -29,15 +30,37 @@ interface FormValues {
 const CreateFlashcardScreen = ({}) => {
   const createApi = useApi(flashcardApi.createFlashcard);
   const [requestFailed, setRequestFailed] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [uploadVisible, setUploadVisible] = useState(false);
 
-  const handleSubmit = async ({ subject, question, answer }: FormValues) => {
-    const response = await createApi.request({ subject, question, answer });
-    console.log(response.data);
-    if (!response.ok) return setRequestFailed(true);
+  const handleSubmit = async (
+    { subject, question, answer }: FormValues,
+    { resetForm }: { resetForm: () => void }
+  ) => {
+    setProgress(0);
+    setUploadVisible(true);
+    const response = await createApi.request(
+      { subject, question, answer },
+      (progress: number) => setProgress(progress)
+    );
+
+    console.log(response);
+
+    if (!response.ok) {
+      setUploadVisible(false);
+      return setRequestFailed(true);
+    }
+
     setRequestFailed(false);
+    resetForm();
   };
   return (
     <Screen style={styles.container}>
+      <UploadScreen
+        onDone={() => setUploadVisible(false)}
+        progress={progress}
+        visible={uploadVisible}
+      />
       <Text style={styles.header}>Create a New Flashcard</Text>
       <Form
         initialValues={{ subject: '', question: '', answer: '' }}

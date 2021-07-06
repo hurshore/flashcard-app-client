@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 interface FormProps {
   children: React.ReactNode;
   initialValues: object;
-  onSubmit: (arg: any) => any;
+  onSubmit: (arg1: any, arg2: any) => any;
   validationSchema: object;
 }
 
