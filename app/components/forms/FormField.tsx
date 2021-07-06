@@ -11,7 +11,7 @@ interface FormFieldProps {
   placeholder: string;
 }
 
-const AppFormField = ({ name, placeholder }: FormFieldProps) => {
+const AppFormField = ({ name, placeholder, ...otherProps }: FormFieldProps) => {
   const {
     errors,
     setFieldTouched,
@@ -27,6 +27,7 @@ const AppFormField = ({ name, placeholder }: FormFieldProps) => {
         onChangeText={(text: any) => setFieldValue(name, text)}
         placeholder={placeholder}
         value={values[name]}
+        {...otherProps}
       />
       <ErrorMessage error={errors[name]} visible={touched[name]} />
     </View>
