@@ -19,4 +19,17 @@ const createFlashcard = (
   });
 };
 
-export default { getRandomFlashcards, getRandomFlashcard, createFlashcard };
+const getUserFlashcards = () => client.get('/flashcard/set/user');
+
+const getUserFlashcard = (id: string) => client.get('/flashcard/set', { id });
+
+const deleteFlashcard = (id: string) => client.delete('/flashcard', { id });
+
+export default {
+  getRandomFlashcards,
+  getRandomFlashcard,
+  createFlashcard,
+  getUserFlashcards,
+  getUserFlashcard,
+  deleteFlashcard,
+};

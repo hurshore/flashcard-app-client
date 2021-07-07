@@ -19,17 +19,18 @@ import CardFlip from '../components/CardFlip';
 import FlipCardContext from '../context/flipcard';
 import flashcardApi from '../api/flashcard';
 import useApi from '../hooks/useApi';
-import { HomeScreenParamList } from '../navigation/types';
+import { AppStackParamList } from '../navigation/types';
 import ViewFlashcardSkeleton from '../components/skeletons/ViewFlashcardSkeleton';
+import ActivityIndicator from '../components/ActivityIndicator';
 
 interface ViewFlashcardsProps {
   subject: string;
-  route: RouteProp<HomeScreenParamList, 'ViewFlashcard'>;
+  route: RouteProp<AppStackParamList, 'ViewFlashcard'>;
 }
 
 interface FlashcardApiProp {
   request: (...args: any[]) => void;
-  data: { question: string; answer: string }[];
+  data: { _id: string; question: string; answer: string }[];
   loading: boolean;
 }
 
@@ -40,16 +41,22 @@ const ViewFlashcardScreen = ({ route }: ViewFlashcardsProps) => {
   const { flipped, flipCard } = useContext(FlipCardContext);
   const isInitialMount = useRef(true);
   const modalRef = useRef();
+  const { id, random, subject, flashcardCount } = route.params;
+  const { request: deleteFlashcard, loading: deleteLoading } = useApi(
+    flashcardApi.deleteFlashcard
+  );
   const {
     request: getFlashcard,
     data: flashcards,
     loading,
-  }: FlashcardApiProp = useApi(flashcardApi.getRandomFlashcard);
-  const { id, random, subject, flashcardCount } = route.params;
+  }: FlashcardApiProp = useApi(
+    random ? flashcardApi.getRandomFlashcard : flashcardApi.getUserFlashcard
+  );
 
   useEffect(() => {
     if (random) getFlashcard(id, flashcardCount);
-  }, []);
+    else getFlashcard(id);
+  }, [route.params]);
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -75,8 +82,16 @@ const ViewFlashcardScreen = ({ route }: ViewFlashcardsProps) => {
     }
   };
 
+  const handleDelete = async () => {
+    const response = await deleteFlashcard(flashcards[currentNumber - 1]._id);
+    console.log(response);
+    if (!response.ok) return;
+    console.log('Flashcard deleted');
+  };
+
   return (
     <>
+      <ActivityIndicator visible={deleteLoading} />
       {flashcards.length < 1 || loading ? (
         <ViewFlashcardSkeleton count={flashcardCount} subject={subject} />
       ) : (
@@ -135,13 +150,19 @@ const ViewFlashcardScreen = ({ route }: ViewFlashcardsProps) => {
             isOpen={modalOpen}
             onClosed={() => setModalOpen(false)}
           >
-            <TouchableHighlight onPress={() => console.log('Clicked 1')}>
+            <TouchableHighlight
+              underlayColor={colors.light}
+              onPress={() => console.log('Clicked 1')}
+            >
               <View style={styles.modalContent}>
                 <Text>Edit</Text>
               </View>
             </TouchableHighlight>
 
-            <TouchableHighlight onPress={() => console.log('Clicked 2')}>
+            <TouchableHighlight
+              underlayColor={colors.light}
+              onPress={handleDelete}
+            >
               <View style={styles.modalContent}>
                 <Text style={styles.delete}>Delete</Text>
               </View>

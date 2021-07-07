@@ -19,13 +19,10 @@ import useApi from '../hooks/useApi';
 import useAuth from '../auth/useAuth';
 import ActivityIndicator from '../components/ActivityIndicator';
 
-type RegisterScreenNavigationProp = StackNavigationProp<
-  AuthStackParamList,
-  'Register'
->;
+type NavigationProp = StackNavigationProp<AuthStackParamList, 'Register'>;
 
 interface RegisterScreenProps {
-  navigation: RegisterScreenNavigationProp;
+  navigation: NavigationProp;
 }
 
 const validationSchema = Yup.object().shape({

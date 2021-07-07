@@ -9,20 +9,17 @@ import colors from '../config/colors';
 import flashcardApi from '../api/flashcard';
 import useApi from '../hooks/useApi';
 import FlashcardSetSkeleton from '../components/skeletons/FlashcardSetSkeleton';
-import { HomeScreenParamList } from '../navigation/types';
+import { AppStackParamList } from '../navigation/types';
 
 interface FlashcardSet {
   id: string;
   name: string;
 }
 
-type HomeScreenNavigationProp = StackNavigationProp<
-  HomeScreenParamList,
-  'Home'
->;
+type NavigationProp = StackNavigationProp<AppStackParamList, 'Home'>;
 
 interface HomeScreenProps {
-  navigation: HomeScreenNavigationProp;
+  navigation: NavigationProp;
 }
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {

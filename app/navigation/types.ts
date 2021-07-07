@@ -9,10 +9,6 @@ export type AppStackParamList = {
   AddFlashcard: undefined;
   MyFlashcards: undefined;
   Account: undefined;
-};
-
-export type HomeScreenParamList = {
-  Home: undefined;
   ViewFlashcard: {
     id: string;
     subject: string;

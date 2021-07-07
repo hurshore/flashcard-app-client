@@ -3,11 +3,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import CreateFlashcardScreen from '../screens/CreateFlashcardScreen';
-import UserFlashcardsScreen from '../screens/UserFlashcardsScreen';
 import AccountScreen from '../screens/AccountScreen';
 import colors from '../config/colors';
 import HomeNavigator from './HomeNavigator';
 import { AppStackParamList } from './types';
+import UserFlashcardsNavigator from './UserFlashcardsNavigator';
 
 const Tab = createBottomTabNavigator<AppStackParamList>();
 
@@ -34,7 +34,7 @@ const AppNavigator = () => {
       />
       <Tab.Screen
         name="MyFlashcards"
-        component={UserFlashcardsScreen}
+        component={UserFlashcardsNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="cards" color={color} size={size} />
