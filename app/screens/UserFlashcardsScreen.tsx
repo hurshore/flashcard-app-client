@@ -38,6 +38,8 @@ const UserFlashcardsScreen = ({ navigation }: Props) => {
           data={userFlashcardsApi.data}
           keyExtractor={(item: FlashcardSet) => item._id.toString()}
           showsVerticalScrollIndicator={false}
+          refreshing={userFlashcardsApi.loading}
+          onRefresh={() => userFlashcardsApi.request()}
           renderItem={({ item }) => (
             <FlashcardSet
               onPress={(count: number) =>

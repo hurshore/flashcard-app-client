@@ -10,6 +10,7 @@ import flashcardApi from '../api/flashcard';
 import useApi from '../hooks/useApi';
 import FlashcardSetSkeleton from '../components/skeletons/FlashcardSetSkeleton';
 import { AppStackParamList } from '../navigation/types';
+import { getRandomInt, createRandomArray } from '../utility/functions';
 
 interface FlashcardSet {
   id: string;
@@ -29,12 +30,6 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     exploreApi.request();
   }, []);
 
-  function getRandomInt(min: number, max: number) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-
   return (
     <Screen style={styles.container}>
       <Text style={styles.header}>Explore</Text>
@@ -43,6 +38,9 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           data={exploreApi.data}
           keyExtractor={(item: FlashcardSet) => item.id.toString()}
           showsVerticalScrollIndicator={false}
+          refreshing={exploreApi.loading}
+          onRefresh={() => exploreApi.request()}
+          initialNumToRender={10}
           renderItem={({ item }) => (
             <FlashcardSet
               onPress={(count: number) =>
@@ -59,9 +57,11 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           )}
         />
       ) : (
-        Array(7)
-          .fill('x')
-          .map((_, index) => <FlashcardSetSkeleton key={index} />)
+        <FlatList
+          data={createRandomArray(7)}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={FlashcardSetSkeleton}
+        />
       )}
     </Screen>
   );

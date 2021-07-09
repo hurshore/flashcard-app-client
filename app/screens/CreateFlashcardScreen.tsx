@@ -44,8 +44,6 @@ const CreateFlashcardScreen = ({}) => {
       (progress: number) => setProgress(progress)
     );
 
-    console.log(response);
-
     if (!response.ok) {
       setUploadVisible(false);
       return setRequestFailed(true);

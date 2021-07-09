@@ -15,7 +15,7 @@ const useApi = (apiFunc: (...rest: any[]) => any) => {
     return response;
   };
 
-  return { data, error, loading, request };
+  return { data, error, loading, request, setData };
 };
 
 export default useApi;

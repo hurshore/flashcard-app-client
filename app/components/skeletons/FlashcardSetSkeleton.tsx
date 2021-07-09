@@ -1,40 +1,29 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import { Text } from 'react-native';
+import SkeletonContent from 'react-native-skeleton-content';
 
 import colors from '../../config/colors';
 
 const FlashcardSetSkeleton = ({}) => {
   return (
-    <View style={styles.skeleton}>
-      <SkeletonPlaceholder>
-        <View style={styles.title} />
-      </SkeletonPlaceholder>
-      <SkeletonPlaceholder>
-        <View style={styles.subtitle} />
-      </SkeletonPlaceholder>
-    </View>
+    <SkeletonContent
+      containerStyle={{
+        width: '100%',
+        backgroundColor: colors.white,
+        borderRadius: 15,
+        marginBottom: 20,
+        padding: 15,
+      }}
+      isLoading={true}
+      layout={[
+        { key: 'someId', width: 220, height: 15, marginBottom: 10 },
+        { key: 'someOtherId', width: 150, height: 13 },
+      ]}
+    >
+      <Text>Your content</Text>
+      <Text>Other content</Text>
+    </SkeletonContent>
   );
 };
-
-const styles = StyleSheet.create({
-  skeleton: {
-    backgroundColor: colors.white,
-    borderRadius: 15,
-    padding: 15,
-    marginBottom: 20,
-  },
-  subtitle: {
-    borderRadius: 5,
-    height: 10,
-    marginTop: 8,
-    width: 100,
-  },
-  title: {
-    height: 15,
-    width: 200,
-    borderRadius: 4,
-  },
-});
 
 export default FlashcardSetSkeleton;
