@@ -8,14 +8,15 @@ import FlipCardContext from './app/context/flipcard';
 import AuthNavigator from './app/navigation/AuthNavigator';
 import AppNavigator from './app/navigation/AppNavigator';
 import authStorage from './app/auth/storage';
+import { FlashcardProvider } from './app/context/flashcard';
 
-type USer = {
+type User = {
   name: string;
   email: string;
 };
 
 export default function App() {
-  const [user, setUser] = useState<USer | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [flipped, setFlipped] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
@@ -42,7 +43,9 @@ export default function App() {
     <NavigationContainer>
       <AuthContext.Provider value={{ user, setUser }}>
         <FlipCardContext.Provider value={{ flipped, flipCard }}>
-          {user ? <AppNavigator /> : <AuthNavigator />}
+          <FlashcardProvider>
+            {user ? <AppNavigator /> : <AuthNavigator />}
+          </FlashcardProvider>
           <StatusBar style="auto" />
         </FlipCardContext.Provider>
       </AuthContext.Provider>

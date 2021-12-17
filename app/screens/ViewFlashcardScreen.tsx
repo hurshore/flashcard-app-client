@@ -6,7 +6,6 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { StatusBar } from 'expo-status-bar';
 import * as Progress from 'react-native-progress';
 import Modal from 'react-native-modalbox';
 import { RouteProp } from '@react-navigation/native';
@@ -19,16 +18,11 @@ import Button from '../components/Button';
 import CardFlip from '../components/CardFlip';
 import FlipCardContext from '../context/flipcard';
 import flashcardApi from '../api/flashcard';
-import useApi from '../hooks/useApi';
 import { AppStackParamList } from '../navigation/types';
 import ActivityIndicator from '../components/ActivityIndicator';
-
-interface FlashcardApiProp {
-  request: (...args: any[]) => void;
-  data: { _id: string; question: string; answer: string }[];
-  loading: boolean;
-  setData: (arg: any) => void;
-}
+import StatusBar from '../components/StatusBar';
+import { useFlashcard, useDispatchFlashcard } from '../context/flashcard';
+import * as actionTypes from '../context/actiontypes';
 
 type NavigationProp = StackNavigationProp<AppStackParamList, 'ViewFlashcard'>;
 
@@ -42,24 +36,21 @@ const ViewFlashcardScreen = ({ route, navigation }: ViewFlashcardsProps) => {
   const [currentNumber, setCurrentNumber] = useState<number>(1);
   const [delayAnimation, setDelayAnimation] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [flashcardLoading, setFlashcardLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const { flipped, flipCard } = useContext(FlipCardContext);
   const isInitialMount = useRef(true);
   const modalRef = useRef();
-  const { id, random, subject, flashcardCount } = route.params;
-  const { request: deleteFlashcard, loading: deleteLoading } = useApi(
-    flashcardApi.deleteFlashcard
-  );
-  const {
-    request: getFlashcard,
-    data: flashcards,
-    loading: flashcardLoading,
-    setData,
-  }: FlashcardApiProp = useApi(
-    random ? flashcardApi.getRandomFlashcard : flashcardApi.getUserFlashcard
-  );
+  const { id: flashcardSetId, random, subject, flashcardCount } = route.params;
+  const { openFlashcardSet: flashcards } = useFlashcard();
+  const dispatch = useDispatchFlashcard();
 
   useEffect(() => {
-    getFlashcard(id, flashcardCount);
+    getFlashcard(flashcardSetId, flashcardCount);
+
+    return () => {
+      dispatch({ type: actionTypes.SET_OPEN_FLASHCARD_SET, payload: [] });
+    };
   }, []);
 
   useEffect(() => {
@@ -69,6 +60,26 @@ const ViewFlashcardScreen = ({ route, navigation }: ViewFlashcardsProps) => {
       setDelayAnimation(true);
     }
   }, [currentNumber]);
+
+  const getFlashcard = async (id: string, flashcardCount: number) => {
+    setFlashcardLoading(true);
+
+    const response: any = random
+      ? await flashcardApi.getRandomFlashcard(id, flashcardCount)
+      : await flashcardApi.getUserFlashcard(id);
+
+    setFlashcardLoading(false);
+
+    if (!response.ok) {
+      alert(response.data.error);
+      navigation.goBack();
+    }
+
+    dispatch({
+      type: actionTypes.SET_OPEN_FLASHCARD_SET,
+      payload: response.data,
+    });
+  };
 
   const goToNextCard = (): void => {
     if (currentNumber < flashcards.length) setCurrentNumber(currentNumber + 1);
@@ -87,22 +98,46 @@ const ViewFlashcardScreen = ({ route, navigation }: ViewFlashcardsProps) => {
   };
 
   const handleDelete = async () => {
+    setDeleting(true);
     const id = flashcards[currentNumber - 1]._id;
-    const response = await deleteFlashcard(id);
-    if (!response.ok) return;
+    const response = await flashcardApi.deleteFlashcard(id);
+    setDeleting(false);
+
+    if (!response.ok) return alert('Something went wrong');
+
     const newFlashcards = flashcards.filter(
       (flashcard) => flashcard._id !== id
     );
-    console.log(newFlashcards);
-    setData(newFlashcards);
+
+    dispatch({
+      type: actionTypes.SET_OPEN_FLASHCARD_SET,
+      payload: newFlashcards,
+    });
+
+    dispatch({
+      type: actionTypes.DELETE_FLASHCARD,
+      payload: { id: flashcardSetId },
+    });
+
     if (currentNumber > 1) setCurrentNumber(currentNumber - 1);
     else if (newFlashcards.length < 1) navigation.goBack();
     setModalOpen(false);
   };
 
+  const handleEdit = async () => {
+    navigation.navigate('EditFlashcard', {
+      id: flashcards[currentNumber - 1]._id,
+      subject: subject,
+      question: flashcards[currentNumber - 1].question,
+      answer: flashcards[currentNumber - 1].answer,
+    });
+    setModalOpen(false);
+  };
+
   return (
     <>
-      <ActivityIndicator visible={deleteLoading || flashcardLoading} />
+      <StatusBar style="light" {...{ backgroundColor: colors.primary }} />
+      <ActivityIndicator visible={deleting || flashcardLoading} />
       <Screen style={styles.container}>
         <View style={styles.subjectContainer}>
           <View style={styles.navButtons}>
@@ -158,7 +193,6 @@ const ViewFlashcardScreen = ({ route, navigation }: ViewFlashcardsProps) => {
 
           <Button onPress={flipCard} title="Flip Card" />
         </View>
-        <StatusBar style="light" backgroundColor={colors.primary} />
         <Modal
           position="center"
           style={styles.modal}
@@ -166,10 +200,7 @@ const ViewFlashcardScreen = ({ route, navigation }: ViewFlashcardsProps) => {
           isOpen={modalOpen}
           onClosed={() => setModalOpen(false)}
         >
-          <TouchableHighlight
-            underlayColor={colors.light}
-            onPress={() => console.log('Clicked 1')}
-          >
+          <TouchableHighlight underlayColor={colors.light} onPress={handleEdit}>
             <View style={styles.modalContent}>
               <Text>Edit</Text>
             </View>

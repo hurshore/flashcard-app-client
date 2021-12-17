@@ -7,6 +7,12 @@ export type AuthStackParamList = {
 export type AppStackParamList = {
   Home: undefined;
   AddFlashcard: undefined;
+  EditFlashcard: {
+    id: string;
+    subject: string;
+    question: string;
+    answer: string;
+  };
   MyFlashcards: undefined;
   Account: undefined;
   ViewFlashcard: {

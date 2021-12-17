@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -7,9 +7,10 @@ import FlashcardSet from '../components/FlashcardSet';
 import Text from '../components/Text';
 import colors from '../config/colors';
 import flashcardApi from '../api/flashcard';
-import useApi from '../hooks/useApi';
 import FlashcardSetSkeleton from '../components/skeletons/FlashcardSetSkeleton';
 import { AppStackParamList } from '../navigation/types';
+import { useFlashcard, useDispatchFlashcard } from '../context/flashcard';
+import * as actionTypes from '../context/actiontypes';
 
 interface FlashcardSet {
   _id: string;
@@ -24,22 +25,37 @@ interface Props {
 }
 
 const UserFlashcardsScreen = ({ navigation }: Props) => {
-  const userFlashcardsApi = useApi(flashcardApi.getUserFlashcards);
+  const [loading, setLoading] = useState(false);
+  const { flashcardSets } = useFlashcard();
+  const dipsatch = useDispatchFlashcard();
 
   useEffect(() => {
-    userFlashcardsApi.request();
+    fetchFlashcardSets();
   }, []);
+
+  const fetchFlashcardSets = async () => {
+    setLoading(true);
+    const response: any = await flashcardApi.getUserFlashcards();
+    setLoading(false);
+
+    if (!response.ok) return alert(response.data.error);
+
+    dipsatch({
+      type: actionTypes.SET_USER_FLASHCARD_SETS,
+      payload: response.data,
+    });
+  };
 
   return (
     <Screen style={styles.container}>
       <Text style={styles.header}>My Flashcards</Text>
-      {!userFlashcardsApi.loading ? (
+      {!loading ? (
         <FlatList
-          data={userFlashcardsApi.data}
+          data={flashcardSets}
           keyExtractor={(item: FlashcardSet) => item._id.toString()}
           showsVerticalScrollIndicator={false}
-          refreshing={userFlashcardsApi.loading}
-          onRefresh={() => userFlashcardsApi.request()}
+          refreshing={loading}
+          onRefresh={fetchFlashcardSets}
           renderItem={({ item }) => (
             <FlashcardSet
               onPress={(count: number) =>

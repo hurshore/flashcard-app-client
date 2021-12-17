@@ -30,7 +30,7 @@ const FlashcardSet = ({
         <MaterialCommunityIcons
           name="chevron-right"
           color={colors.medium}
-          size={35}
+          size={25}
         />
       </View>
     </TouchableWithoutFeedback>
